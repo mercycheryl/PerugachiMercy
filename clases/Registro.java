@@ -3,10 +3,8 @@ package Prueba2BPerugachiMercy.clases;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class Registro extends JFrame{
+public class Registro extends JFrame {
     private JPanel panelRegistro;
     private JButton btnGuardar;
     private JButton btnLimpiar;
@@ -17,74 +15,86 @@ public class Registro extends JFrame{
     private JTextField txtStock;
 
     public Registro() {
-        setTitle("Registro");
-        setSize(400, 300);
-
+        setTitle("Registro de Productos");
+        setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(panelRegistro);
         setLocationRelativeTo(null);
-        btnLimpiar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtCod.setText("");
-                txtNombre.setText("");
-                txtDet.setText("");
-                txtPrecio.setText("");
-                txtStock.setText("");
-            }
-        });
+
+
+
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validarCampos()){
-                    JOptionPane.showMessageDialog(null,"Datos guardados correctamente");
+                if (validarCampos()) {
+                    JOptionPane.showMessageDialog(null, "Producto guardado correctamente.");
+
+                    limpiarCampos();
                 }
-                System.out.println(validarCampos());
-                String cod=txtCod.getText();
-                String nombre=txtNombre.getText();
-                String det=txtDet.getText();
-                String precio=txtPrecio.getText();
-                String stock=txtStock.getText();
+            }
+        });
 
 
-                String contenido = ":::::::::: MOSTRAR PRODUCTOS ::::::::::\n";
-                contenido += "Codigo: "+ cod+ "\n";
-                contenido += "Nombre: " + nombre + "\n";
-                contenido += "Detalle " + det + "\n";
-                contenido += "Stock actuario: " + stock+ "\n";
-
-
-
+        btnLimpiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos();
             }
         });
     }
 
     private boolean validarCampos() {
+        String precioStr = txtPrecio.getText().trim();
+        String stockStr = txtStock.getText().trim();
+
         if (txtCod.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Código está vacío.");
+            mostrar("El campo Código está vacío.");
             txtCod.requestFocus();
             return false;
         }
-
         if (txtNombre.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Nombre está vacío.");
+            mostrar("El campo Nombre está vacío.");
             txtNombre.requestFocus();
             return false;
         }
-
         if (txtDet.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Detalle está vacío.");
+            mostrar("El campo Detalle está vacío.");
             txtDet.requestFocus();
             return false;
         }
-        if (txtPrecio.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Precio Unitario está vacío.");
+        if (precioStr.isEmpty()) {
+            mostrar("El campo Precio Unitario está vacío.");
+            txtPrecio.requestFocus();
+            return false;
+        }
+        if (stockStr.isEmpty()) {
+            mostrar("El campo Stock está vacío.");
+            txtStock.requestFocus();
+            return false;
+        }
+
+        try {
+            double precio = Double.parseDouble(precioStr);
+            if (precio > 9999) {
+                mostrar("El precio no debe superar 4 cifras.");
+                txtPrecio.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrar("Precio debe ser numérico.");
             txtPrecio.requestFocus();
             return false;
         }
 
-        if (txtStock.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo Stock está vacío.");
+        try {
+            int stock = Integer.parseInt(stockStr);
+            if (stock > 999) {
+                mostrar("El stock no debe superar 3 cifras.");
+                txtStock.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrar("Stock debe ser un número entero.");
             txtStock.requestFocus();
             return false;
         }
@@ -92,11 +102,18 @@ public class Registro extends JFrame{
         return true;
     }
 
-
-    public static void main(String[] args){
-        SwingUtilities.invokeLater(()->{
-            new Registro().setVisible(true);
-        });
+    private void mostrar(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
     }
 
+    private void limpiarCampos() {
+        txtCod.setText("");
+        txtNombre.setText("");
+        txtDet.setText("");
+        txtPrecio.setText("");
+        txtStock.setText("");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Registro().setVisible(true));}
 }
