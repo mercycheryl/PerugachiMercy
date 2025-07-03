@@ -30,10 +30,11 @@ public class Ventas extends JFrame{
                 String password=txtPassword.getText();
 
                 if(user.equals("mercy")&& password.equals("123")){
+
                     Menu menu= new Menu();
                     menu.setVisible(true);
                 }else {
-                    JOptionPane.showMessageDialog(null,"Credenciales incorrectas");
+                    JOptionPane.showMessageDialog(null,"Credenciales incorrectas o campos vacíos");
                 }
                 txtUser.setText("");
                 txtPassword.setText("");
@@ -52,7 +53,19 @@ public class Ventas extends JFrame{
 
     }
 
-
+    public boolean validarCampos(){
+        if (txtUser.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo User está vacío.");
+            txtUser.requestFocus();
+            return false;
+        }
+        if (txtPassword.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo User está vacío.");
+            txtPassword.requestFocus();
+            return false;
+        }
+        return false;
+    }
     //
 
     public static void main(String[] args){
