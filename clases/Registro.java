@@ -22,7 +22,6 @@ public class Registro extends JFrame {
         setLocationRelativeTo(null);
 
 
-
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
